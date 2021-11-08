@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 class Logcat {
   /// [MethodChannel] used to communicate with the platform side.
   static const platform = const MethodChannel('app.channel.logcat');
+  static Future<String> get platformVersion async =>
+      await platform.invokeMethod('getPlatformVersion') ?? '42';
 
   /// Fetches the app logs by executing the logcat command-line tool.
   /// May throw [PlatformException] from [MethodChannel].
@@ -20,7 +22,7 @@ class Logcat {
     }
     String logs;
     try {
-      logs = await platform.invokeMethod('execLogcat');
+      logs = await platform.invokeMethod('execLogcat') ?? "";
     } on PlatformException catch (e) {
       logs = "Failed to get logs: '${e.message}'.";
     }
